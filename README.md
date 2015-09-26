@@ -1,6 +1,6 @@
 # Todo.php
 
-A simple task manager, made from just one php file without DB.
+A simple task manager, made from the just one php file, without DB.
 
 ## How to use
 
