@@ -1,12 +1,16 @@
 <?php
 /**
  *  Todo.php   - A Simple Task Manager -
- *  @version   0.3.11
+ *  @version   0.4.0
  *  @see       http://0-oo.net/sbox/php-tool-box/todo
  *  @copyright 2008-2015 dgbadmin@gmail.com
  *  @license   http://0-oo.net/pryn/MIT_license.txt (The MIT license)
  */
 class Todo {
+    /** jQueryのバージョン */
+    const JQUERY_VER = '2.1.4';
+    const JQUERY_UI_VER = '1.11.4';
+
     /** 文字コード */
     const ENCODING = 'UTF-8';
 
@@ -197,29 +201,36 @@ $todo->setUp();
 <head>
 <meta charset="<?php echo Todo::ENCODING ?>" />
 <title>TODO - <?php echo h($todo->cat) ?></title>
+<link rel="stylesheet" href="//code.jquery.com/ui/<?php echo Todo::JQUERY_UI_VER ?>/themes/redmond/jquery-ui.min.css" />
 <link rel="stylesheet" href="//0-oo.github.io/pryn.css" />
 <link rel="stylesheet" href="//0-oo.github.io/yahho-sticky-footer.css" />
 <style>
 header, article, footer { display: block }
-header {        padding-top: 1em }
-#bd, #add {     font-size: 100% }
+#hd {           padding-top: 1em }
+#bd {           font-size: 100% }
 #cat {          margin-bottom: 1em; font-size: 161.6% }
-h1 {            margin: 1em 0 0 }
+h1, select, input { margin: 0 }
 a {             text-decoration: none }
 a:visited {     color: #03c }
 tr.row:hover {  background-color: #79a }
 th, td {        border: solid #79a 1px }
 td {            padding: 1px 0 1px 1px }
-select, input { margin: 0 }
 select, input.date, footer { text-align: center }
-select, #todo input { border-width: 0; font-size: 108%; line-height: 1.4 }
-select {        width: 4em; height: 1.7em }
-input.todo {    padding-left: 0.5em; width: 18em }
+select, #todo input { border-width: 0; font-size: 116%; line-height: 1.4 }
+select {        width: 3.6em; height: 1.7em }
+input.todo {    padding-left: 0.5em; width: 17em }
 input.date {    width: 5.8em }
 #update {       text-align: right }
 #update input { padding: 0.7em 2em; line-height: 1.6 }
-li {            padding-top: 0.5em; font-size: 131% }
-li#add input {  width: 4.5em }
+li {            padding-top: 2em }
+li a {          font-size: 131% }
+li#add input {  width: 4.9em }
+#ft {           height: 2em }
+
+.ui-datepicker td span, .ui-datepicker td a { text-align: center }
+/* カレンダーの年・月の選択を可能にするなら必要
+.ui-datepicker select.ui-datepicker-year, .ui-datepicker select.ui-datepicker-month { width: auto }
+*/
 </style>
 <script>
 //IEでHTML5の新要素を使えるようにする
@@ -245,7 +256,8 @@ if ($todo->isValidCat()) {
     <form method="POST">
 
     <div id="cat">
-    カテゴリ ： <input type="text" name="cat" value="<?php echo h($todo->cat) ?>" />
+    カテゴリ
+    <input type="text" name="cat" value="<?php echo h($todo->cat) ?>" />
     <input type="hidden" name="oldcat" value="<?php echo h($todo->cat) ?>" />
     </div>
 
@@ -366,23 +378,24 @@ powered by <a href="http://0-oo.net/sbox/php-tool-box/todo">Todo.php</a>
 
 </div>
 
+<script src="//code.jquery.com/jquery-<?php echo Todo::JQUERY_VER ?>.min.js"></script>
+<script src="//code.jquery.com/ui/<?php echo Todo::JQUERY_UI_VER ?>/jquery-ui.min.js"></script>
 <script src="//0-oo.github.io/pryn.js"></script>
-<script src="//0-oo.github.io/yahho-calendar.js"></script>
 <script src="//0-oo.github.io/gcalendar-holidays.js" async="async" defer="defer"></script>
 <script>
-Pryn.addEvent(window, "load", function() {
-    YahhoCal.loadYUI();
-    YahhoCal.setMondayAs1st();
-    (function(input) {
-        var acs = new Pryn.ClassAccessor(input);
-        if (acs.hasClass("date")) {
-            Pryn.addEvent(input, "click", function() {
-                YahhoCal.render(YAHOO.util.Dom.generateId(input));
-            });
-            acs.addClass("clickable");
-            input.title = "クリックするとカレンダーを表示します";
-        }
-    }).foreach($T("input"));
+$(function() {
+    // カレンダーのオプションはお好みで http://api.jqueryui.com/datepicker/
+    $(".date").datepicker({
+        //changeYear: true,
+        //changeMonth: true,
+        yearSuffix: "年",
+        showMonthAfterYear: true,
+        monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+        firstDay: 1,
+        dayNamesMin: ["日", "月", "火", "水", "木", "金", "土"],
+        //showButtonPanel: true,
+        dateFormat: "yy/m/d"
+    });
 });
 </script>
 
