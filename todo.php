@@ -1,7 +1,7 @@
 <?php
 /**
  *  Todo.php   - A Simple Task Manager -
- *  @version   0.4.1
+ *  @version   0.4.2
  *  @see       http://0-oo.net/sbox/php-tool-box/todo
  *  @copyright 2008-2016 dgbadmin@gmail.com
  *  @license   http://0-oo.net/MIT_license.txt (The MIT license)
@@ -197,12 +197,10 @@ $todo->setUp();
 <head>
 <meta charset="<?php echo Todo::ENCODING ?>" />
 <title>TODO - <?php echo h($todo->cat) ?></title>
-<!-- カレンダーのテーマはお好みで @see http://jqueryui.com/themeroller/#!themeGallery -->
-<link rel="stylesheet" href="//cdn.jsdelivr.net/jquery.ui/latest/themes/redmond/jquery-ui.min.css" />
+<link rel="stylesheet" href="//cdn.jsdelivr.net/jquery.ui/latest/jquery-ui.min.css" />
 <link rel="stylesheet" href="//0-oo.github.io/pryn.css" />
 <link rel="stylesheet" href="//0-oo.github.io/yahho-sticky-footer.css" />
 <style>
-header, article, footer { display: block }
 #hd {           padding-top: 1em }
 #bd {           font-size: 100% }
 #cat {          margin-bottom: 1em; font-size: 161.6% }
@@ -225,11 +223,6 @@ li#add input {  width: 4.9em }
 #ft {           height: 2em }
 .ui-datepicker td span, .ui-datepicker td a { text-align: center }
 </style>
-<script>
-//IEでHTML5の新要素を使えるようにする
-document.createElement("header");
-document.createElement("footer");
-</script>
 </head>
 
 <body>
@@ -371,7 +364,7 @@ powered by <a href="http://0-oo.net/sbox/php-tool-box/todo">Todo.php</a>
 
 </div>
 
-<script src="//cdn.jsdelivr.net/g/jquery@2,jquery.ui"></script>
+<script src="//cdn.jsdelivr.net/g/jquery,jquery.ui"></script>
 <script src="//0-oo.github.io/pryn.js"></script>
 <script src="//0-oo.github.io/gcalendar-holidays.js" defer="defer"></script>
 <script>
@@ -380,7 +373,7 @@ $(function() {
     $(".date").datepicker({
         yearSuffix: "年",
         showMonthAfterYear: true,
-        monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+        monthNames: (function(m, a){ for (; m < 13; m++) a.push(m + "月"); return a; })(1, []),
         firstDay: 1,
         dayNamesMin: ["日", "月", "火", "水", "木", "金", "土"],
         dateFormat: "yy/m/d",
